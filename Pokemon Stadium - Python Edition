@@ -1,0 +1,8 @@
+import numpy as rm
+
+#msg = "Roll a dice!"
+#print(msg)
+#print(rm.random.randint(1,9))
+
+print("Why hello trainer! Lets battle!")
+print("What Pokemon would you like to use to lose?")
