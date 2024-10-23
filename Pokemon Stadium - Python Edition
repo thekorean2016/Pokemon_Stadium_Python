@@ -4,5 +4,42 @@ import numpy as rm
 #print(msg)
 #print(rm.random.randint(1,9))
 
+#Start the interaction
 print("Why hello trainer! Lets battle!")
+
+#Will they battle (run the application)
+print("Do you want to battle? Y/N")
+answer = input()
+answer = answer.upper()
+
+#Make sure they have the right kind of input
+while answer != 'Y' and answer != 'N':
+    print("Whoops, that's not a recognized input, lets try that again")
+    answer = input()
+    answer = answer.upper()
+
+#What the NPC says if they say no
+if answer == 'N':
+    print("Didn't realize I ran into a scardy cat. How can you call yourself a trainer?!")
+
+#Start getting their pokemon
 print("What Pokemon would you like to use to lose?")
+
+print("1) Blazekin: Fire Fighting\n"
+      "2) Victreebel: Grass Poison\n"
+      "3) Hawlucha: Flying Fighting\n"
+      "4) Bisharp: Dark Steel\n"
+      "5) Tapukoko: Electric Fairy\n"
+      "6) Tyrantrum: Rock Dragon\n"
+      "7) Claydol: Ground Psychic\n"
+      "8) Ursaring: Normal\n"
+      "9) Lucario: Fighting Steel\n"
+      "10) Nidoking: Poison Ground\n"
+      "11) Hoopa: Psychic Ghost\n"
+      "12) Metapod: Bug\n"
+      "13) MismagiusWw: Ghost\n"
+      "14) Aggron: Steel Rock\n"
+      "15) Gyrados: Water Flying\n"
+      "16) Froslass: Ice Ghost\n"
+      "17) Dragonite: Dragon Flying\n"
+      "18) Iron Valiant: Fairy Fighting\n")
