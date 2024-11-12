@@ -1,45 +1,83 @@
-import numpy as rm
-
 #msg = "Roll a dice!"
 #print(msg)
 #print(rm.random.randint(1,9))
 
-#Start the interaction
-print("Why hello trainer! Lets battle!")
+#Function definitions and imports____________________________________________________________________________________________________________________________________________________
 
-#Will they battle (run the application)
-print("Do you want to battle? Y/N")
-answer = input()
-answer = answer.upper()
+import numpy as rm
 
-#Make sure they have the right kind of input
-while answer != 'Y' and answer != 'N':
-    print("Whoops, that's not a recognized input, lets try that again")
+def nameChecker(name):
+
+    statement = f'{name}, thats your name right?'
+    print(statement)
     answer = input()
     answer = answer.upper()
+    if answer != 'Y':
+        print("Bruh, you're the one that spelled it. Spell it right this time!")
+        name = input()
+        nameChecker(name)
+    return name
+def inputChecker(answer):
+    answer = answer.upper()
+    #Make sure they have the right kind of input
+    if answer != 'Y' and answer != 'N':
+        print("Whoops, that's not a recognized input, lets try that again")
+        answer = input()
+        inputChecker(answer)
+def pokemonChooser():
+    choice1 = int(input())
+    choice2 = int(input())
+    choice3 = int(input())
+    print('\n')
+    return choice1, choice2, choice3
+
+#Needed variables before the code starts______________________________________________________________________________________________________________________________________________
+pokemonList = ('Blazekin', 'Victreebel', 'Hawlucha', 'Bisharp', 'Tapukoko', 'Tyrantrum', 'Claydol', 'Ursaring', 'Lucario', 'Nidoking', 'Hoopa', 'Metapod', 'Mismagius',
+               'Aagron', 'Gyrados', 'Froslass', 'Dragonite', 'Iron Valiant')
+
+#Main Code____________________________________________________________________________________________________________________________________________________________________________
+
+print('What is your name?')
+name = input()
+name = nameChecker(name)
+
+#Start the interaction
+statement = f'RIVAL: Why hello {name}! Lets battle!'
+print(statement)
+
+#Will they battle (run the application)\
+statement = f'RIVAL: Wait, {name}, do you even want to battle? Y/N'
+print(statement)
+answer = input()
+inputChecker(answer)
 
 #What the NPC says if they say no
 if answer == 'N':
-    print("Didn't realize I ran into a scardy cat. How can you call yourself a trainer?!")
+    print("RIVAL: Didn't realize I ran into a scardy cat. {name}, how can you call yourself a trainer?!\n CREATOR OF THE GAME: Thanks for playing. I hope you play again!")
+    exit()
 
 #Start getting their pokemon
-print("What Pokemon would you like to use to lose?")
+print("So, what Pokemon would you like to use to lose?")
 
-print("1) Blazekin: Fire Fighting\n"
-      "2) Victreebel: Grass Poison\n"
-      "3) Hawlucha: Flying Fighting\n"
-      "4) Bisharp: Dark Steel\n"
-      "5) Tapukoko: Electric Fairy\n"
-      "6) Tyrantrum: Rock Dragon\n"
-      "7) Claydol: Ground Psychic\n"
-      "8) Ursaring: Normal\n"
-      "9) Lucario: Fighting Steel\n"
-      "10) Nidoking: Poison Ground\n"
-      "11) Hoopa: Psychic Ghost\n"
-      "12) Metapod: Bug\n"
-      "13) MismagiusWw: Ghost\n"
-      "14) Aggron: Steel Rock\n"
-      "15) Gyrados: Water Flying\n"
-      "16) Froslass: Ice Ghost\n"
-      "17) Dragonite: Dragon Flying\n"
-      "18) Iron Valiant: Fairy Fighting\n")
+print('''1) Blazekin: Fire Fighting
+      2) Victreebel: Grass Poison
+      3) Hawlucha: Flying Fighting
+      4) Bisharp: Dark Steel
+      5) Tapukoko: Electric Fairy
+      6) Tyrantrum: Rock Dragon
+      7) Claydol: Ground Psychic
+      8) Ursaring: Normal
+      9) Lucario: Fighting Steel
+      10) Nidoking: Poison Ground
+      11) Hoopa: Psychic Ghost
+      12) Metapod: Bug
+      13) Mismagius: Ghost
+      14) Aggron: Steel Rock
+      15) Gyrados: Water Flying
+      16) Froslass: Ice Ghost
+      17) Dragonite: Dragon Flying
+      18) Iron Valiant: Fairy Fighting''')
+
+userPokemon1, userPokemon2, userPokemon3 = pokemonChooser()
+statement = f'Did you choose {pokemonList[userPokemon1 - 1]}, {pokemonList[userPokemon2 - 1]}, and {pokemonList[userPokemon3 - 1]}?'
+print(statement)
