@@ -5,10 +5,11 @@
 #Function definitions and imports____________________________________________________________________________________________________________________________________________________
 
 import numpy as rm
+import random
 
 def nameChecker(name):
 
-    statement = f'{name}, thats your name right?'
+    statement = f'{name}, thats your name right? Y/N'
     print(statement)
     answer = input()
     answer = answer.upper()
@@ -30,6 +31,24 @@ def pokemonChooser():
     choice3 = int(input())
     print('\n')
     return choice1, choice2, choice3
+def pokemonChecker(answer, pokemonListandTypes, pokemonList):
+    answer = answer.upper()
+    while answer != 'Y':
+        print("RIVAL: Well then pick what you want! You'll still lose, but quit waisting my time!\n")
+        print(pokemonListandTypes)
+        userPokemon1, userPokemon2, userPokemon3 = pokemonChooser()
+        statement = f'Did you choose {pokemonList[userPokemon1 - 1]}, {pokemonList[userPokemon2 - 1]}, and {pokemonList[userPokemon3 - 1]}? Y/N'
+        print(statement)
+        answer = input().upper()
+    return userPokemon1, userPokemon2, userPokemon3
+def pokemonRecount(pokemonListandTypes, pokemonList):
+    print("CREATOR: Whoops, that number didn't correlate to a pokmeon, lets try that again :D")
+    print(pokemonListandTypes)
+    userPokemon1, userPokemon2, userPokemon3 = pokemonChooser()
+    statement = f'Did you choose {pokemonList[userPokemon1 - 1]}, {pokemonList[userPokemon2 - 1]}, and {pokemonList[userPokemon3 - 1]}?'
+    print(statement)
+    answer = input().upper()
+    userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
 
 #Needed variables before the code starts______________________________________________________________________________________________________________________________________________
 pokemonList = ('Blazekin', 'Victreebel', 'Hawlucha', 'Bisharp', 'Tapukoko', 'Tyrantrum', 'Claydol', 'Ursaring', 'Lucario', 'Nidoking', 'Hoopa', 'Metapod', 'Mismagius',
@@ -59,25 +78,46 @@ if answer == 'N':
 #Start getting their pokemon
 print("So, what Pokemon would you like to use to lose?")
 
-print('''1) Blazekin: Fire Fighting
-      2) Victreebel: Grass Poison
-      3) Hawlucha: Flying Fighting
-      4) Bisharp: Dark Steel
-      5) Tapukoko: Electric Fairy
-      6) Tyrantrum: Rock Dragon
-      7) Claydol: Ground Psychic
-      8) Ursaring: Normal
-      9) Lucario: Fighting Steel
-      10) Nidoking: Poison Ground
-      11) Hoopa: Psychic Ghost
-      12) Metapod: Bug
-      13) Mismagius: Ghost
-      14) Aggron: Steel Rock
-      15) Gyrados: Water Flying
-      16) Froslass: Ice Ghost
-      17) Dragonite: Dragon Flying
-      18) Iron Valiant: Fairy Fighting''')
+    #List the Pokemon you can choose from
+pokemonListandTypes = '''1) Blazekin: Fire Fighting
+2) Victreebel: Grass Poison
+3) Hawlucha: Flying Fighting
+4) Bisharp: Dark Steel
+5) Tapukoko: Electric Fairy
+6) Tyrantrum: Rock Dragon
+7) Claydol: Ground Psychic
+8) Ursaring: Normal
+9) Lucario: Fighting Steel
+10) Nidoking: Poison Ground
+11) Hoopa: Psychic Ghost
+12) Metapod: Bug
+13) Mismagius: Ghost
+14) Aggron: Steel Rock
+15) Gyrados: Water Flying
+16) Froslass: Ice Ghost
+17) Dragonite: Dragon Flying
+18) Iron Valiant: Fairy Fighting'''
+print(pokemonListandTypes)
 
+    #Player picks their Pokemon
 userPokemon1, userPokemon2, userPokemon3 = pokemonChooser()
-statement = f'Did you choose {pokemonList[userPokemon1 - 1]}, {pokemonList[userPokemon2 - 1]}, and {pokemonList[userPokemon3 - 1]}?'
+if userPokemon1 > 18 or userPokemon2 > 18 or userPokemon3 > 18:
+    userPokemon1, userPokemon2, userPokemon3 = pokemonRecount()
+statement = f'Did you choose {pokemonList[userPokemon1 - 1]}, {pokemonList[userPokemon2 - 1]}, and {pokemonList[userPokemon3 - 1]}? Y/N'
+print(statement)
+answer = input().upper()
+
+    # Player can repick Pokemon if necessary
+if answer != 'Y':
+    userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
+
+#Rival picks their Pokemon
+print('RIVAL: Well then, let me pick my Pokemon to beat you. Should be easy enough ;D')
+
+    # Random Pokemon selected, given their own variables, and listed.
+rivalsPokemon = random.sample(range(0, 17), 3)
+
+rivalPokemon1, rivalPokemon2, rivalPokemon3 = rivalsPokemon
+
+statement = f'My Pokemon will be {pokemonList[rivalPokemon1]}, {pokemonList[rivalPokemon2]}, and {pokemonList[rivalPokemon3]}. Should be an easy win!'
 print(statement)
