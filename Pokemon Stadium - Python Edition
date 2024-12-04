@@ -2,10 +2,30 @@
 #print(msg)
 #print(rm.random.randint(1,9))
 
-#Function definitions and imports____________________________________________________________________________________________________________________________________________________
+#Function definitions, classes, and imports______________________________________________________________________________________________________________________________________
 
 import numpy as rm
 import random
+
+class Pokemon:
+    def __init__(self, name, type1, type2):
+        self.name = name
+        self.type1 = type1
+        self.type2 = type2
+class stats:
+    def __init__(self, HP, attack, defense, sp_attack, sp_defense, speed):
+        self.HP = HP
+        self.attack = attack
+        self.defense = defense
+        self.sp_attack = sp_attack
+        self.sp_defense = sp_defense
+        self.speed = speed
+class MoveInfo:
+    def __init__(self, name, classification, power, accuracy):
+        self.name = name
+        self.classification = classification
+        self.power = power
+        self.accuracy = accuracy
 
 def nameChecker(name):
 
@@ -50,7 +70,7 @@ def pokemonRecount(pokemonListandTypes, pokemonList):
     answer = input().upper()
     userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
 
-#Needed variables before the code starts______________________________________________________________________________________________________________________________________________
+#Needed variables and objects before the code starts__________________________________________________________________________________________________________________________________
 pokemonList = ('Blazekin', 'Victreebel', 'Hawlucha', 'Bisharp', 'Tapukoko', 'Tyrantrum', 'Claydol', 'Ursaring', 'Lucario', 'Nidoking', 'Hoopa', 'Metapod', 'Mismagius',
                'Aagron', 'Gyrados', 'Froslass', 'Dragonite', 'Iron Valiant')
 
@@ -121,3 +141,13 @@ rivalPokemon1, rivalPokemon2, rivalPokemon3 = rivalsPokemon
 
 statement = f'My Pokemon will be {pokemonList[rivalPokemon1]}, {pokemonList[rivalPokemon2]}, and {pokemonList[rivalPokemon3]}. Should be an easy win!'
 print(statement)
+
+Blazekin = []
+
+Blazekin.append(Pokemon('Blazekin'))
+Blazekin.append(stats(100, 99, 98, 97, 96, 95))
+Blazekin.append(MoveInfo('Double Kick', 'physical', 45, 95))
+
+print(Blazekin[0].name)
+print(Blazekin[1].HP)
+print(Blazekin[2].name)
