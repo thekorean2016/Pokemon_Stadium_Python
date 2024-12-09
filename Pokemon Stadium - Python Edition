@@ -71,8 +71,136 @@ def pokemonRecount(pokemonListandTypes, pokemonList):
     userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
 
 #Needed variables and objects before the code starts__________________________________________________________________________________________________________________________________
-pokemonList = ('Blazekin', 'Victreebel', 'Hawlucha', 'Bisharp', 'Tapukoko', 'Tyrantrum', 'Claydol', 'Ursaring', 'Lucario', 'Nidoking', 'Hoopa', 'Metapod', 'Mismagius',
-               'Aagron', 'Gyrados', 'Froslass', 'Dragonite', 'Iron Valiant')
+pokemonList = ('Blaziken', 'Victreebel', 'Hawlucha', 'Bisharp', 'Tapukoko', 'Tyrantrum', 'Claydol', 'Ursaring', 'Lucario', 'Nidoking', 'Hoopa', 'Metapod', 'Mismagius'
+               'Aggron', 'Gyarados', 'Froslass', 'Dragonite', 'Iron Valiant')
+
+Blaziken = []
+Blaziken.append(Pokemon('Blaziken', 'Fire', 'Fighting'))
+Blaziken.append(stats(317, 296, 196, 276, 196, 216))
+Blaziken.append(MoveInfo('Double Kick', 'physical', 45, 95))
+Blaziken.append(MoveInfo('Double Kick', 'physical', 45, 95))
+Blaziken.append(MoveInfo('Double Kick', 'physical', 45, 95))
+Blaziken.append(MoveInfo('Double Kick', 'physical', 45, 95))
+Victreebel = []
+Victreebel.append(Pokemon('Victreebel', 'Grass', 'Poison'))
+Victreebel.append(stats(317, 266, 186, 256, 196, 196))
+Victreebel.append(MoveInfo())
+Victreebel.append(MoveInfo())
+Victreebel.append(MoveInfo())
+Victreebel.append(MoveInfo())
+Hawlucha = []
+Hawlucha.append(Pokemon('Hawlucha', 'Fighting', 'Flying'))
+Hawlucha.append(stats(313, 240.5, 206, 204, 182, 292))
+Hawlucha.append(MoveInfo())
+Hawlucha.append(MoveInfo())
+Hawlucha.append(MoveInfo())
+Hawlucha.append(MoveInfo())
+Bisharp = []
+Bisharp.append(Pokemon('Bisharp', 'Dark', 'Steel'))
+Bisharp.append(stats(287, 306, 256, 176, 196, 196))
+Bisharp.append(MoveInfo())
+Bisharp.append(MoveInfo())
+Bisharp.append(MoveInfo())
+Bisharp.append(MoveInfo())
+Bisharp.append(MoveInfo())
+Tapu_Koko = []
+Tapu_Koko.append(Pokemon('Tapu_Koko', 'Electric', 'Fairy'))
+Tapu_Koko.append(stats(297, 286, 226, 246, 206, 316))
+Tapu_Koko.append(MoveInfo())
+Tapu_Koko.append(MoveInfo())
+Tapu_Koko.append(MoveInfo())
+Tapu_Koko.append(MoveInfo())
+Tyrantrum = []
+Tyrantrum.append(Pokemon('Tyrantrum', 'Rock', 'Dragon'))
+Tyrantrum.append(stats(321, 298.5, 294, 194, 174, 198.5))
+Tyrantrum.append(MoveInfo())
+Tyrantrum.append(MoveInfo())
+Tyrantrum.append(MoveInfo())
+Tyrantrum.append(MoveInfo())
+Claydol = []
+Claydol.append(Pokemon('Claydol', 'Ground', 'Psychic'))
+Claydol.append(stats(277, 196, 266, 196, 296, 206))
+Claydol.append(MoveInfo())
+Claydol.append(MoveInfo())
+Claydol.append(MoveInfo())
+Claydol.append(MoveInfo())
+Ursaring = []
+Ursaring.append(Pokemon('Ursaring', 'Normal', 'NA'))
+Ursaring.append(stats(337, 316, 206, 206, 206, 166))
+Ursaring.append(MoveInfo())
+Ursaring.append(MoveInfo())
+Ursaring.append(MoveInfo())
+Ursaring.append(MoveInfo())
+Lucario = []
+Lucario.append(Pokemon('Lucario', 'Fighting', 'Steel'))
+Lucario.append((297, 276, 196, 286, 196, 236))
+Lucario.append(())
+Lucario.append(())
+Lucario.append(())
+Lucario.append(())
+Nidoking = []
+Nidoking.append(Pokemon('Nidoking', 'Ground', 'Poison'))
+Nidoking.append(stats(319, 260.5, 210.5, 226, 206, 226))
+Nidoking.append(MoveInfo())
+Nidoking.append(MoveInfo())
+Nidoking.append(MoveInfo())
+Nidoking.append(MoveInfo())
+Hoopa = []
+Hoopa.append(Pokemon('Hoopa', 'Psychic', 'Ghost'))
+Hoopa.append(stats(317, 276, 176, 356, 316, 196))
+Hoopa.append(MoveInfo())
+Hoopa.append(MoveInfo())
+Hoopa.append(MoveInfo())
+Hoopa.append(MoveInfo())
+Metapod = []
+Metapod.append(Pokemon('Metapod', 'Bug', 'NA'))
+Metapod.append(stats(304, 202, 229, 213, 213, 224))
+Metapod.append(MoveInfo())
+Metapod.append(MoveInfo())
+Metapod.append(MoveInfo())
+Metapod.append(MoveInfo())
+Mismagius = []
+Mismagius.append(Pokemon('Mismagius', 'Ghost', 'NA'))
+Mismagius.append(stats(277, 176, 176, 266, 266, 266))
+Mismagius.append(MoveInfo())
+Mismagius.append(MoveInfo())
+Mismagius.append(MoveInfo())
+Mismagius.append(MoveInfo())
+Aggron = []
+Aggron.append(Pokemon('Aggron', 'Rock', 'Steel'))
+Aggron.append(stats(297, 271, 416, 176, 176, 156))
+Aggron.append(MoveInfo())
+Aggron.append(MoveInfo())
+Aggron.append(MoveInfo())
+Aggron.append(MoveInfo())
+Gyarados = []
+Gyarados.append(Pokemon('Gyarados', 'Water', 'Flying'))
+Gyarados.append(stats(347, 306, 214, 176, 256, 218.5))
+Gyarados.append(MoveInfo())
+Gyarados.append(MoveInfo())
+Gyarados.append(MoveInfo())
+Gyarados.append(MoveInfo())
+Froslass = []
+Froslass.append(Pokemon('Froslass', 'Ice', 'Ghost'))
+Froslass.append(stats(297, 216, 196, 216, 196, 276))
+Froslass.append(MoveInfo())
+Froslass.append(MoveInfo())
+Froslass.append(MoveInfo())
+Froslass.append(MoveInfo())
+Dragonite = []
+Dragonite.append(Pokemon('Dragonite', 'Dragon', 'Flying'))
+Dragonite.append(stats(339, 324, 246, 256, 256, 216))
+Dragonite.append(MoveInfo())
+Dragonite.append(MoveInfo())
+Dragonite.append(MoveInfo())
+Dragonite.append(MoveInfo())
+Iron_Valiant = []
+Iron_Valiant.append(Pokemon('Iron Valiant', 'Fairy', 'Fighting'))
+Iron_Valiant.append(stats(305, 316, 236, 296, 176, 288.5))
+Iron_Valiant.append(MoveInfo())
+Iron_Valiant.append(MoveInfo())
+Iron_Valiant.append(MoveInfo())
+Iron_Valiant.append(MoveInfo())
 
 #Main Code____________________________________________________________________________________________________________________________________________________________________________
 
@@ -99,7 +227,7 @@ if answer == 'N':
 print("So, what Pokemon would you like to use to lose?")
 
     #List the Pokemon you can choose from
-pokemonListandTypes = '''1) Blazekin: Fire Fighting
+pokemonListandTypes = '''1) Blaziken: Fire Fighting
 2) Victreebel: Grass Poison
 3) Hawlucha: Flying Fighting
 4) Bisharp: Dark Steel
@@ -113,7 +241,7 @@ pokemonListandTypes = '''1) Blazekin: Fire Fighting
 12) Metapod: Bug
 13) Mismagius: Ghost
 14) Aggron: Steel Rock
-15) Gyrados: Water Flying
+15) Gyarados: Water Flying
 16) Froslass: Ice Ghost
 17) Dragonite: Dragon Flying
 18) Iron Valiant: Fairy Fighting'''
@@ -141,13 +269,3 @@ rivalPokemon1, rivalPokemon2, rivalPokemon3 = rivalsPokemon
 
 statement = f'My Pokemon will be {pokemonList[rivalPokemon1]}, {pokemonList[rivalPokemon2]}, and {pokemonList[rivalPokemon3]}. Should be an easy win!'
 print(statement)
-
-Blazekin = []
-
-Blazekin.append(Pokemon('Blazekin'))
-Blazekin.append(stats(100, 99, 98, 97, 96, 95))
-Blazekin.append(MoveInfo('Double Kick', 'physical', 45, 95))
-
-print(Blazekin[0].name)
-print(Blazekin[1].HP)
-print(Blazekin[2].name)
