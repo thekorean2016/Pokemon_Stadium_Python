@@ -1,11 +1,58 @@
-#msg = "Roll a dice!"
-#print(msg)
-#print(rm.random.randint(1,9))
-
-#Function definitions, classes, and imports______________________________________________________________________________________________________________________________________
+#Function definitions, dictionaries, classes, and imports________________________________________________________________________________________________________________________
 
 import numpy as rm
 import random
+import math
+
+attackerTypeVDefenderTypeXDOUBLE = {
+    'Fire' : ['Grass', 'Ice', 'Bug', 'Steel'],
+    'Water' : ['Fire', 'Ground', 'Rock'],
+    'Electric' : ['Water', 'Flying'],
+    'Grass' : ['Water', 'Ground', 'Rock'],
+    'Ice' : ['Grass', 'Ground', 'Flying', 'Dragon'],\
+    'Fighting' : ['Normal', 'Ice', 'Rock', 'Dark', 'Steel'],
+    'Poison' : ['Grass', 'Fairy'],
+    'Ground' : ['Fire', 'Electric', 'Poison', 'Rock', 'Steel'],
+    'Flying' : ['Grass', 'Fighting', 'Bug'],
+    'Psychic' : ['Fighting', 'Poison'],
+    'Bug' : ['Grass', 'Psychic', 'Dark'],
+    'Rock' : ['Fire', 'Ice', 'Flying', 'Bug'],
+    'Ghost' : ['Psychic', 'Ghost'],
+    'Dragon' : ['Dragon'],
+    'Dark' : ['Psychic', 'Ghost'],
+    'Steel' : ['Ice', 'Rock', 'Fairy'],
+    'Fairy' : ['Fighting', 'Dragon', 'Dark']
+}
+attackerTypeVDefenderTypeXHALF = {
+    'Normal' : ['Rock', 'Steel'],
+    'Fire' : ['Fire', 'Water', 'Rock', 'Dragon'],
+    'Water' : ['Water', 'Grass', 'Dragon'],
+    'Electric' : ['Electric', 'Grass', 'Dragon'],
+    'Grass' : ['Fire', 'Grass', 'Poison', 'Flying', 'Bug', 'Dragon', 'Steel'],
+    'Ice' : ['Fire', 'Water', 'Ice', 'Steel'],
+    'Fighting' : ['Poison', 'Flying', 'Psychic', 'Bug', 'Fairy'],
+    'Poison' : ['Poison', 'Ground', 'Rock', 'Ghost'],
+    'Ground' : ['Grass', 'Rock'],
+    'Flying' : ['Electric', 'Rock', 'Steel'],
+    'Psychic' : ['Psychic', 'Steel'],
+    'Bug' : ['Fire', 'Fighting', 'Poison', 'Flying', 'Ghost', 'Steel', 'Fairy'],
+    'Rock' : ['Fighting', 'Ground', 'Steel'],
+    'Ghost' : ['Dark'],
+    'Dragon' : ['Steel'],
+    'Dark' : ['Dark', 'Fairy'],
+    'Steel' : ['Fire', 'Water', 'Electric', 'Steel'],
+    'Fairy' : ['Fire', 'Poison', 'Steel']
+}
+attackerTypeVDefenderTypeX0 = {
+    'Normal' : ['Ghost'],
+    'Electric' : ['Ground'],
+    'Fighting' : ['Ghost'],
+    'Poison' : ['Steel'],
+    'Ground' : ['Flying'],
+    'Psychic' : ['Dark'],
+    'Ghost' : ['Normal'],
+    'Dragon' : ['Fairy'],
+}
 
 class Pokemon:
     def __init__(self, name, type1, type2):
@@ -70,6 +117,54 @@ def pokemonRecount(pokemonListandTypes, pokemonList):
     print(statement)
     answer = input().upper()
     userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
+def damageCalculation(type, power, a, d, moveType, attackingPokemonType1, attackingPokemonType2, defendingPokemonType1, defendingPokemonType2):
+    #Determine the random factor that is between .85 and 1
+    random = random.sample(range(85, 100), 1)
+    random = random/100
+
+    #Determine if there is a crtical hit
+    critNum = random.sample(range(1, 16), 1)
+    if critNum == 14:
+        critical = 1.5
+    if critNum != 14:
+        critical = 1
+        
+    #Determine the Same Type Attack Bonus (STAB)
+    stab = 1
+    if moveType == attackingPokemonType1 or moveType == attackingPokemonType2:
+        stab = 1.5
+
+    #Determine type effectiveness
+    multiplierUp = 0
+    for x in attackerTypeVDefenderTypeXDOUBLE.get(moveType):
+        if x == defendingPokemonType1:
+            multiplierUp = multiplierUp + 1
+        if x == defendingPokemonType2:
+            multiplierUp = multiplierUp + 1
+    
+    multiplierDown = 1
+    for y in attackerTypeVDefenderTypeXHALF.get(moveType):
+        if y == defendingPokemonType1:
+            multiplierDown = multiplierDown/2
+        if y == defendingPokemonType2:
+            multiplierDown = multiplierDown/2
+    
+    type = 2**(multiplierUp * multiplierDown)
+
+    if moveType in attackerTypeVDefenderTypeX0:
+        for z in attackerTypeVDefenderTypeX0.get(moveType):
+            if z == defendingPokemonType1 or z == defendingPokemonType2:
+                type = 0
+
+    type = math.floor(type)
+
+    #Damage Calculation if it's a physical move
+    if type == 'Physical':
+        ((((((2*50)/5)+2)*power*(a/d))/50)+2)*critical*random*stab*type
+def userFirst():
+    pass
+def rivalFirst():
+    pass
 
 #Needed variables and objects before the code starts__________________________________________________________________________________________________________________________________
 pokemonList = ('Blaziken', 'Victreebel', 'Hawlucha', 'Bisharp', 'Tapukoko', 'Tyrantrum', 'Claydol', 'Ursaring', 'Lucario', 'Nidoking', 'Hoopa', 'Metapod', 'Mismagius'
@@ -79,7 +174,7 @@ Blaziken = []
 Blaziken.append(Pokemon('Blaziken', 'Fire', 'Fighting'))
 Blaziken.append(stats(317, 296, 196, 276, 196, 216))
 Blaziken.append(MoveInfo('Double Kick', 'Fighting', 'Physical', 30, 100))
-Blaziken.append(MoveInfo('Brave Bird', 'Flying' 'Physical', 120, 100))
+Blaziken.append(MoveInfo('Brave Bird', 'Flying', 'Physical', 120, 100))
 Blaziken.append(MoveInfo('Fire Blast', ' Fire', 'Special', 110, 85))
 Blaziken.append(MoveInfo('Slash', 'Normal', 'Physical', 70, 100))
 Victreebel = []
@@ -202,6 +297,27 @@ Iron_Valiant.append(MoveInfo('Moon Blast', 'Fairy', 'Special', 95, 100))
 Iron_Valiant.append(MoveInfo('Close Combat', 'Fighting', 'Physical', 120, 100))
 Iron_Valiant.append(MoveInfo('Leaf Blade', 'Grass', 'Physical', 90, 100))
 
+#Put all the afore stated Pokemon into a single list for easier access
+pokemonStats = []
+pokemonStats.append(Blaziken)
+pokemonStats.append(Victreebel)
+pokemonStats.append(Hawlucha)
+pokemonStats.append(Kingambit)
+pokemonStats.append(Tapu_Koko)
+pokemonStats.append(Tyrantrum)
+pokemonStats.append(Claydol)
+pokemonStats.append(Ursaring)
+pokemonStats.append(Lucario)
+pokemonStats.append(Nidoking)
+pokemonStats.append(Hoopa)
+pokemonStats.append(Metapod)
+pokemonStats.append(Mismagius)
+pokemonStats.append(Aggron)
+pokemonStats.append(Gyarados)
+pokemonStats.append(Froslass)
+pokemonStats.append(Dragonite)
+pokemonStats.append(Iron_Valiant)
+
 #Main Code____________________________________________________________________________________________________________________________________________________________________________
 
 print('What is your name?')
@@ -259,6 +375,11 @@ answer = input().upper()
 if answer != 'Y':
     userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
 
+#Set User's Pokemon stats
+userPokemon1Stats = pokemonStats[userPokemon1-1]
+userPokemon2Stats = pokemonStats[userPokemon2-1]
+userPokemon3Stats = pokemonStats[userPokemon3-1]
+
 #Rival picks their Pokemon
 print('RIVAL: Well then, let me pick my Pokemon to beat you. Should be easy enough ;D')
 
@@ -267,5 +388,30 @@ rivalsPokemon = random.sample(range(0, 17), 3)
 
 rivalPokemon1, rivalPokemon2, rivalPokemon3 = rivalsPokemon
 
+#Set Rival's Pokemon stats
+rivalPokemon1Stats = pokemonStats[rivalPokemon1]
+rivalPokemon2Stats = pokemonStats[rivalPokemon2]
+rivalPokemon3Stats = pokemonStats[rivalPokemon3]
+
+#State rival's Pokemon
 statement = f'My Pokemon will be {pokemonList[rivalPokemon1]}, {pokemonList[rivalPokemon2]}, and {pokemonList[rivalPokemon3]}. Should be an easy win!'
 print(statement)
+
+#Announcer states the rules
+statement = f"""ANNOUNCER: {name} sends out {userPokemon1Stats[0].name}, and his rival send out {rivalPokemon1Stats[0].name}! What an exciting matchup!
+ANNOUNCER: As a reminder of the rules:
+1) The Pokemon with the higher speed will go first.
+2) After each round of combat, the difference between the two Pokemon's speed will be calculated and added to itself. If the difference ever passes that of the 
+    slower Pokemon's speed, the faster Pokemon will get to attack twice before the slower Pokemon will have it's turn.
+3) Type advantages and disadvantages are applied to both types if applicable. E.g. A Water move against a Ground/Rock Pokemon is 4x effective
+4) You cannot switch out Pokemon mid fight. Once a Pokemon is chosen, it will fight until it is fainted
+5) There are no healing items allowed
+
+Now that the rules are out of the way, LETS BEGIN!!!"""
+print(statement)
+
+#Determine who goes first
+if userPokemon1Stats[1].speed > rivalPokemon1Stats[1].speed:
+    userFirst()
+if userPokemon1Stats[1].speed < rivalPokemon1Stats[1].speed:
+    rivalFirst()
