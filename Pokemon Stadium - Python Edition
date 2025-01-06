@@ -117,8 +117,8 @@ def pokemonRecount(pokemonListandTypes, pokemonList):
     print(statement)
     answer = input().upper()
     userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
-#                    (userStats, rivalStats, moveNumber)
-def damageCalculation(type, power, a, d, moveType, attackingPokemonType1, attackingPokemonType2, defendingPokemonType1, defendingPokemonType2):
+
+def damageCalculation(attackingStats, defendingStats, moveNumber):
     #This is generation 5 and onward damage calculations
 
     #Set level for all Pokemon
@@ -137,36 +137,36 @@ def damageCalculation(type, power, a, d, moveType, attackingPokemonType1, attack
         
     #Determine the Same Type Attack Bonus (STAB)
     stab = 1
-    if moveType == attackingPokemonType1 or moveType == attackingPokemonType2:
+    if attackingStats[moveNumber].type == attackingStats[0].type1 or attackingStats[moveNumber].type == attackingStats[0].type2:
         stab = 1.5
 
     #Determine type effectiveness
     multiplierUp = 0
-    for x in attackerTypeVDefenderTypeXDOUBLE.get(moveType):
-        if x == defendingPokemonType1:
+    for x in attackerTypeVDefenderTypeXDOUBLE.get(attackingStats[moveNumber].type):
+        if x == defendingStats[0].type1:
             multiplierUp = multiplierUp + 1
-        if x == defendingPokemonType2:
+        if x == defendingStats[0].type2:
             multiplierUp = multiplierUp + 1
     
     multiplierDown = 1
-    for y in attackerTypeVDefenderTypeXHALF.get(moveType):
-        if y == defendingPokemonType1:
+    for y in attackerTypeVDefenderTypeXHALF.get(attackingStats[moveNumber].type):
+        if y == defendingStats[0].type1:
             multiplierDown = multiplierDown/2
-        if y == defendingPokemonType2:
+        if y == defendingStats[0].type2:
             multiplierDown = multiplierDown/2
     
     type = 2**(multiplierUp * multiplierDown)
 
-    if moveType in attackerTypeVDefenderTypeX0:
-        for z in attackerTypeVDefenderTypeX0.get(moveType):
-            if z == defendingPokemonType1 or z == defendingPokemonType2:
+    if attackingStats[moveNumber].type in attackerTypeVDefenderTypeX0:
+        for z in attackerTypeVDefenderTypeX0.get(attackingStats[moveNumber].type):
+            if z == defendingStats[0].type1 or z == defendingStats[0].type2:
                 type = 0
 
-    type = math.floor(type)
+    if attackingStats[moveNumber].classification == 'Physical':
+        ((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].attack/defendingStats[1].defense))/50)+2)*critical*random*stab*type
 
-    #Damage Calculation if it's a physical move
-    if type == 'Physical':
-        ((((((2*level)/5)+2)*power*(a/d))/50)+2)*critical*random*stab*type
+    if attackingStats[moveNumber].classification == 'Special':
+        ((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].sp_attack/defendingStats[1].sp_defense))/50)+2)*critical*random*stab*type
 
 def userFirst(userStats, rivalStats):
     #Determine the speed differene
