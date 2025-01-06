@@ -117,7 +117,13 @@ def pokemonRecount(pokemonListandTypes, pokemonList):
     print(statement)
     answer = input().upper()
     userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
+#                    (userStats, rivalStats, moveNumber)
 def damageCalculation(type, power, a, d, moveType, attackingPokemonType1, attackingPokemonType2, defendingPokemonType1, defendingPokemonType2):
+    #This is generation 5 and onward damage calculations
+
+    #Set level for all Pokemon
+    level = 75
+
     #Determine the random factor that is between .85 and 1
     random = random.sample(range(85, 100), 1)
     random = random/100
@@ -160,9 +166,24 @@ def damageCalculation(type, power, a, d, moveType, attackingPokemonType1, attack
 
     #Damage Calculation if it's a physical move
     if type == 'Physical':
-        ((((((2*50)/5)+2)*power*(a/d))/50)+2)*critical*random*stab*type
-def userFirst():
-    pass
+        ((((((2*level)/5)+2)*power*(a/d))/50)+2)*critical*random*stab*type
+
+def userFirst(userStats, rivalStats):
+    #Determine the speed differene
+    speedDifference = userStats[1].speed - rivalStats[1].speed
+
+    #What move do we use first
+    statement = f"""What move would you like {userStats[0].name}, to use?\n
+    1) {userStats[2].name}: which is a {userStats[2].type} move
+    2) {userStats[3].name}: which is a {userStats[3].type} move
+    3) {userStats[4].name}: which is a {userStats[4].type} move
+    4) {userStats[5].name}: which is a {userStats[5].type} move
+    """
+    print(statement)
+    moveNumber = input() + 1
+
+    #Calculate damage
+    damageCalculation(userStats[moveNumber].type, userStats[moveNumber].power)
 def rivalFirst():
     pass
 
@@ -412,6 +433,6 @@ print(statement)
 
 #Determine who goes first
 if userPokemon1Stats[1].speed > rivalPokemon1Stats[1].speed:
-    userFirst()
+    userFirst(userPokemon1Stats, rivalPokemon1Stats)
 if userPokemon1Stats[1].speed < rivalPokemon1Stats[1].speed:
     rivalFirst()
