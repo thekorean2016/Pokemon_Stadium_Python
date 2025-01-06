@@ -117,7 +117,13 @@ def pokemonRecount(pokemonListandTypes, pokemonList):
     print(statement)
     answer = input().upper()
     userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
-def damageCalculation(type, power, a, d, moveType, attackingPokemonType1, attackingPokemonType2, defendingPokemonType1, defendingPokemonType2):
+
+def damageCalculation(attackingStats, defendingStats, moveNumber):
+    #This is generation 5 and onward damage calculations
+
+    #Set level for all Pokemon
+    level = 75
+
     #Determine the random factor that is between .85 and 1
     random = random.sample(range(85, 100), 1)
     random = random/100
@@ -131,38 +137,53 @@ def damageCalculation(type, power, a, d, moveType, attackingPokemonType1, attack
         
     #Determine the Same Type Attack Bonus (STAB)
     stab = 1
-    if moveType == attackingPokemonType1 or moveType == attackingPokemonType2:
+    if attackingStats[moveNumber].type == attackingStats[0].type1 or attackingStats[moveNumber].type == attackingStats[0].type2:
         stab = 1.5
 
     #Determine type effectiveness
     multiplierUp = 0
-    for x in attackerTypeVDefenderTypeXDOUBLE.get(moveType):
-        if x == defendingPokemonType1:
+    for x in attackerTypeVDefenderTypeXDOUBLE.get(attackingStats[moveNumber].type):
+        if x == defendingStats[0].type1:
             multiplierUp = multiplierUp + 1
-        if x == defendingPokemonType2:
+        if x == defendingStats[0].type2:
             multiplierUp = multiplierUp + 1
     
     multiplierDown = 1
-    for y in attackerTypeVDefenderTypeXHALF.get(moveType):
-        if y == defendingPokemonType1:
+    for y in attackerTypeVDefenderTypeXHALF.get(attackingStats[moveNumber].type):
+        if y == defendingStats[0].type1:
             multiplierDown = multiplierDown/2
-        if y == defendingPokemonType2:
+        if y == defendingStats[0].type2:
             multiplierDown = multiplierDown/2
     
     type = 2**(multiplierUp * multiplierDown)
 
-    if moveType in attackerTypeVDefenderTypeX0:
-        for z in attackerTypeVDefenderTypeX0.get(moveType):
-            if z == defendingPokemonType1 or z == defendingPokemonType2:
+    if attackingStats[moveNumber].type in attackerTypeVDefenderTypeX0:
+        for z in attackerTypeVDefenderTypeX0.get(attackingStats[moveNumber].type):
+            if z == defendingStats[0].type1 or z == defendingStats[0].type2:
                 type = 0
 
-    type = math.floor(type)
+    if attackingStats[moveNumber].classification == 'Physical':
+        ((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].attack/defendingStats[1].defense))/50)+2)*critical*random*stab*type
 
-    #Damage Calculation if it's a physical move
-    if type == 'Physical':
-        ((((((2*50)/5)+2)*power*(a/d))/50)+2)*critical*random*stab*type
-def userFirst():
-    pass
+    if attackingStats[moveNumber].classification == 'Special':
+        ((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].sp_attack/defendingStats[1].sp_defense))/50)+2)*critical*random*stab*type
+
+def userFirst(userStats, rivalStats):
+    #Determine the speed differene
+    speedDifference = userStats[1].speed - rivalStats[1].speed
+
+    #What move do we use first
+    statement = f"""What move would you like {userStats[0].name}, to use?\n
+    1) {userStats[2].name}: which is a {userStats[2].type} move
+    2) {userStats[3].name}: which is a {userStats[3].type} move
+    3) {userStats[4].name}: which is a {userStats[4].type} move
+    4) {userStats[5].name}: which is a {userStats[5].type} move
+    """
+    print(statement)
+    moveNumber = input() + 1
+
+    #Calculate damage
+    damageCalculation(userStats[moveNumber].type, userStats[moveNumber].power)
 def rivalFirst():
     pass
 
@@ -412,6 +433,6 @@ print(statement)
 
 #Determine who goes first
 if userPokemon1Stats[1].speed > rivalPokemon1Stats[1].speed:
-    userFirst()
+    userFirst(userPokemon1Stats, rivalPokemon1Stats)
 if userPokemon1Stats[1].speed < rivalPokemon1Stats[1].speed:
     rivalFirst()
