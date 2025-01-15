@@ -128,7 +128,7 @@ def pokemonRecount(pokemonListandTypes, pokemonList):
     print(statement)
     answer = input().upper()
     userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
-def damageCalculation(attackingStats, defendingStats, moveNumber):
+def damageCalculation(attackingStats, defendingStats, moveNumber, foeHP):
     #This is generation 5 and onward damage calculations
 
     #Set level for all Pokemon
@@ -172,12 +172,17 @@ def damageCalculation(attackingStats, defendingStats, moveNumber):
             if z == defendingStats[0].type1 or z == defendingStats[0].type2:
                 type = 0
 
-    #Calculate damage based on physical or special attacks
-    if attackingStats[moveNumber].classification == 'Physical':
-        damage = ((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].attack/defendingStats[1].defense))/50)+2)*critical*rand*stab*type
+    if attackingStats[moveNumber].name == "Nature's Madness":
+        damage = math.floor(foeHP/2)
+    
+    if attackingStats[moveNumber].name != "Nature's Madness":
 
-    if attackingStats[moveNumber].classification == 'Special':
-        damage = ((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].sp_attack/defendingStats[1].sp_defense))/50)+2)*critical*rand*stab*type
+        #Calculate damage based on physical or special attacks
+        if attackingStats[moveNumber].classification == 'Physical':
+            damage = round(((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].attack/defendingStats[1].defense))/50)+2)*critical*rand*stab*type, 0)
+
+        if attackingStats[moveNumber].classification == 'Special':
+            damage = round(((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].sp_attack/defendingStats[1].sp_defense))/50)+2)*critical*rand*stab*type)
 
     #Display damage
     statement = f"""{attackingStats[0].name} used {attackingStats[moveNumber].name}\n
@@ -204,28 +209,33 @@ def userFirst(userStats, rivalStats):
     userHP = userStats[1].HP
     rivalHP = rivalStats[1].HP
 
+    #Creates the loop that keeps battle going and will end the battle if someone hits 0 HP
+    while userHP > 0 and rivalHP > 0:
 
-    #What move do we use first
-    statement = f"""What move would you like {userStats[0].name}, to use?\n
-    1) {userStats[2].name}: which is a {userStats[2].moveType} move
-    2) {userStats[3].name}: which is a {userStats[3].moveType} move
-    3) {userStats[4].name}: which is a {userStats[4].moveType} move
-    4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
-    """
-    print(statement)
-    userMoveNumber = int(input()) + 1
+        #What move do we use first
+        statement = f"""What move would you like {userStats[0].name}, to use?\n
+        1) {userStats[2].name}: which is a {userStats[2].moveType} move
+        2) {userStats[3].name}: which is a {userStats[3].moveType} move
+        3) {userStats[4].name}: which is a {userStats[4].moveType} move
+        4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
+        """
+        print(statement)
+        userMoveNumber = int(input()) + 1
 
-    #Calculate rival damage taken
-    rivalHP = rivalHP - round(damageCalculation(userStats, rivalStats, userMoveNumber), 0)
+        #Calculate rival damage taken
+        rivalHP = rivalHP - round(damageCalculation(userStats, rivalStats, userMoveNumber, rivalHP), 0)
 
-    #Rival selects move
-    rivalMoveNumber = rivalMoveChoice()
+        #If loop that checks to see if the rival's Pokemon still has HP left
+        if rivalHP > 0:
+            
+            #Rival selects move
+            rivalMoveNumber = rivalMoveChoice()
 
-    #Calcuulate user damage taken
-    userHP = userHP - round(damageCalculation(rivalStats, userStats, rivalMoveNumber), 0)
+            #Calcuulate user damage taken
+            userHP = userHP - round(damageCalculation(rivalStats, userStats, rivalMoveNumber, userHP), 0)
 
-    statement = f"""{userStats[0].name} has {userHP}/{userStats[1].HP}\n
- {rivalStats[0].name} has {rivalHP}/{rivalStats[1].HP}"""
+        statement = f"""{userStats[0].name} has {userHP}/{userStats[1].HP}\n{rivalStats[0].name} has {rivalHP}/{rivalStats[1].HP}\n\n"""
+        print(statement)
 
 def rivalFirst():
     pass
@@ -278,7 +288,7 @@ Tyrantrum.append(MoveInfo('Ice Fang', 'Ice', 'Physical', 65, 95))
 Claydol = []
 Claydol.append(Pokemon('Claydol', 'Ground', 'Psychic'))
 Claydol.append(stats(277, 196, 266, 196, 296, 206))
-Claydol.append(MoveInfo('Explosion', 'Nomal', 'Plysical', 250, 100))
+Claydol.append(MoveInfo('Explosion', 'Normal', 'Physical', 250, 100))
 Claydol.append(MoveInfo('Earth Power', 'Ground', 'Special', 90, 100))
 Claydol.append(MoveInfo('Psychic', 'Psychic', 'Special', 90, 100))
 Claydol.append(MoveInfo('Ice Beam', 'Ice', 'Special', 90, 100))
