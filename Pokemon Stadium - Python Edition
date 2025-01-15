@@ -21,7 +21,8 @@ attackerTypeVDefenderTypeXDOUBLE = {
     'Dragon' : ['Dragon'],
     'Dark' : ['Psychic', 'Ghost'],
     'Steel' : ['Ice', 'Rock', 'Fairy'],
-    'Fairy' : ['Fighting', 'Dragon', 'Dark']
+    'Fairy' : ['Fighting', 'Dragon', 'Dark'],
+    'Normal' : []
 }
 attackerTypeVDefenderTypeXHALF = {
     'Normal' : ['Rock', 'Steel'],
@@ -52,6 +53,16 @@ attackerTypeVDefenderTypeX0 = {
     'Psychic' : ['Dark'],
     'Ghost' : ['Normal'],
     'Dragon' : ['Fairy'],
+    'Fire' : [],
+    'Water' : [],
+    'Grass' : [],
+    'Ice' : [],
+    'Flying' : [],
+    'Bug' : [],
+    'Rock' : [],
+    'Dark' : [],
+    'Steel' : [],
+    'Fairy' : []
 }
 
 class Pokemon:
@@ -68,9 +79,9 @@ class stats:
         self.sp_defense = sp_defense
         self.speed = speed
 class MoveInfo:
-    def __init__(self, name, type, classification, power, accuracy):
+    def __init__(self, name, moveType, classification, power, accuracy):
         self.name = name
-        self.type = type
+        self.moveType = moveType
         self.classification = classification
         self.power = power
         self.accuracy = accuracy
@@ -84,7 +95,7 @@ def nameChecker(name):
     if answer != 'Y':
         print("Bruh, you're the one that spelled it. Spell it right this time!")
         name = input()
-        nameChecker(name)
+        name = nameChecker(name)
     return name
 def inputChecker(answer):
     answer = answer.upper()
@@ -117,7 +128,6 @@ def pokemonRecount(pokemonListandTypes, pokemonList):
     print(statement)
     answer = input().upper()
     userPokemon1, userPokemon2, userPokemon3 = pokemonChecker(answer, pokemonListandTypes, pokemonList)
-
 def damageCalculation(attackingStats, defendingStats, moveNumber):
     #This is generation 5 and onward damage calculations
 
@@ -125,11 +135,11 @@ def damageCalculation(attackingStats, defendingStats, moveNumber):
     level = 75
 
     #Determine the random factor that is between .85 and 1
-    random = random.sample(range(85, 100), 1)
-    random = random/100
+    rand = random.randrange(85, 100)
+    rand = rand/100
 
     #Determine if there is a crtical hit
-    critNum = random.sample(range(1, 16), 1)
+    critNum = random.randrange(1, 16)
     if critNum == 14:
         critical = 1.5
     if critNum != 14:
@@ -137,19 +147,19 @@ def damageCalculation(attackingStats, defendingStats, moveNumber):
         
     #Determine the Same Type Attack Bonus (STAB)
     stab = 1
-    if attackingStats[moveNumber].type == attackingStats[0].type1 or attackingStats[moveNumber].type == attackingStats[0].type2:
+    if attackingStats[moveNumber].moveType == attackingStats[0].type1 or attackingStats[moveNumber].moveType == attackingStats[0].type2:
         stab = 1.5
 
     #Determine type effectiveness
     multiplierUp = 0
-    for x in attackerTypeVDefenderTypeXDOUBLE.get(attackingStats[moveNumber].type):
+    for x in attackerTypeVDefenderTypeXDOUBLE[attackingStats[moveNumber].moveType]:
         if x == defendingStats[0].type1:
             multiplierUp = multiplierUp + 1
         if x == defendingStats[0].type2:
             multiplierUp = multiplierUp + 1
     
     multiplierDown = 1
-    for y in attackerTypeVDefenderTypeXHALF.get(attackingStats[moveNumber].type):
+    for y in attackerTypeVDefenderTypeXHALF[attackingStats[moveNumber].moveType]:
         if y == defendingStats[0].type1:
             multiplierDown = multiplierDown/2
         if y == defendingStats[0].type2:
@@ -157,46 +167,78 @@ def damageCalculation(attackingStats, defendingStats, moveNumber):
     
     type = 2**(multiplierUp * multiplierDown)
 
-    if attackingStats[moveNumber].type in attackerTypeVDefenderTypeX0:
-        for z in attackerTypeVDefenderTypeX0.get(attackingStats[moveNumber].type):
+    if attackingStats[moveNumber].moveType in attackerTypeVDefenderTypeX0:
+        for z in attackerTypeVDefenderTypeX0[attackingStats[moveNumber].moveType]:
             if z == defendingStats[0].type1 or z == defendingStats[0].type2:
                 type = 0
 
+    #Calculate damage based on physical or special attacks
     if attackingStats[moveNumber].classification == 'Physical':
-        ((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].attack/defendingStats[1].defense))/50)+2)*critical*random*stab*type
+        damage = ((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].attack/defendingStats[1].defense))/50)+2)*critical*rand*stab*type
 
     if attackingStats[moveNumber].classification == 'Special':
-        ((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].sp_attack/defendingStats[1].sp_defense))/50)+2)*critical*random*stab*type
+        damage = ((((((2*level)/5)+2)*attackingStats[moveNumber].power*(attackingStats[1].sp_attack/defendingStats[1].sp_defense))/50)+2)*critical*rand*stab*type
+
+    #Display damage
+    statement = f"""{attackingStats[0].name} used {attackingStats[moveNumber].name}\n
+    {defendingStats[0].name} took {damage} damage!\n"""
+    print(statement)
+
+    if multiplierUp > 0:
+        print('It was super effective!\n')
+    elif multiplierDown < 1:
+        print('It was not very effective!\n')
+    elif type == 0:
+        print("The move had no effect at all\n")
+
+    return damage
+def rivalMoveChoice():
+    number = random.randrange(2, 5)
+    return number
 
 def userFirst(userStats, rivalStats):
     #Determine the speed differene
     speedDifference = userStats[1].speed - rivalStats[1].speed
 
+    #Set the Current HP for both pokemon
+    userHP = userStats[1].HP
+    rivalHP = rivalStats[1].HP
+
+
     #What move do we use first
     statement = f"""What move would you like {userStats[0].name}, to use?\n
-    1) {userStats[2].name}: which is a {userStats[2].type} move
-    2) {userStats[3].name}: which is a {userStats[3].type} move
-    3) {userStats[4].name}: which is a {userStats[4].type} move
-    4) {userStats[5].name}: which is a {userStats[5].type} move
+    1) {userStats[2].name}: which is a {userStats[2].moveType} move
+    2) {userStats[3].name}: which is a {userStats[3].moveType} move
+    3) {userStats[4].name}: which is a {userStats[4].moveType} move
+    4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
     """
     print(statement)
-    moveNumber = input() + 1
+    userMoveNumber = int(input()) + 1
 
-    #Calculate damage
-    damageCalculation(userStats[moveNumber].type, userStats[moveNumber].power)
+    #Calculate rival damage taken
+    rivalHP = rivalHP - round(damageCalculation(userStats, rivalStats, userMoveNumber), 0)
+
+    #Rival selects move
+    rivalMoveNumber = rivalMoveChoice()
+
+    #Calcuulate user damage taken
+    userHP = userHP - round(damageCalculation(rivalStats, userStats, rivalMoveNumber), 0)
+
+    statement = f"""{userStats[0].name} has {userHP}/{userStats[1].HP}\n
+ {rivalStats[0].name} has {rivalHP}/{rivalStats[1].HP}"""
+
 def rivalFirst():
     pass
 
 #Needed variables and objects before the code starts__________________________________________________________________________________________________________________________________
-pokemonList = ('Blaziken', 'Victreebel', 'Hawlucha', 'Bisharp', 'Tapukoko', 'Tyrantrum', 'Claydol', 'Ursaring', 'Lucario', 'Nidoking', 'Hoopa', 'Metapod', 'Mismagius'
-               'Aggron', 'Gyarados', 'Froslass', 'Dragonite', 'Iron Valiant')
+pokemonList = ('Blaziken', 'Victreebel', 'Hawlucha', 'Bisharp', 'Tapukoko', 'Tyrantrum', 'Claydol', 'Ursaring', 'Lucario', 'Nidoking', 'Hoopa', 'Metapod', 'Mismagius', 'Aggron', 'Gyarados', 'Froslass', 'Dragonite', 'Iron Valiant')
 
 Blaziken = []
 Blaziken.append(Pokemon('Blaziken', 'Fire', 'Fighting'))
 Blaziken.append(stats(317, 296, 196, 276, 196, 216))
 Blaziken.append(MoveInfo('Double Kick', 'Fighting', 'Physical', 30, 100))
 Blaziken.append(MoveInfo('Brave Bird', 'Flying', 'Physical', 120, 100))
-Blaziken.append(MoveInfo('Fire Blast', ' Fire', 'Special', 110, 85))
+Blaziken.append(MoveInfo('Fire Blast', 'Fire', 'Special', 110, 85))
 Blaziken.append(MoveInfo('Slash', 'Normal', 'Physical', 70, 100))
 Victreebel = []
 Victreebel.append(Pokemon('Victreebel', 'Grass', 'Poison'))
@@ -402,7 +444,7 @@ userPokemon2Stats = pokemonStats[userPokemon2-1]
 userPokemon3Stats = pokemonStats[userPokemon3-1]
 
 #Rival picks their Pokemon
-print('RIVAL: Well then, let me pick my Pokemon to beat you. Should be easy enough ;D')
+print('\nRIVAL: Well then, let me pick my Pokemon to beat you. Should be easy enough ;D')
 
     # Random Pokemon selected, given their own variables, and listed.
 rivalsPokemon = random.sample(range(0, 17), 3)
@@ -415,11 +457,11 @@ rivalPokemon2Stats = pokemonStats[rivalPokemon2]
 rivalPokemon3Stats = pokemonStats[rivalPokemon3]
 
 #State rival's Pokemon
-statement = f'My Pokemon will be {pokemonList[rivalPokemon1]}, {pokemonList[rivalPokemon2]}, and {pokemonList[rivalPokemon3]}. Should be an easy win!'
+statement = f'RIVAL: My Pokemon will be {pokemonList[rivalPokemon1]}, {pokemonList[rivalPokemon2]}, and {pokemonList[rivalPokemon3]}. Should be an easy win!\n\n'
 print(statement)
 
 #Announcer states the rules
-statement = f"""ANNOUNCER: {name} sends out {userPokemon1Stats[0].name}, and his rival send out {rivalPokemon1Stats[0].name}! What an exciting matchup!
+statement = f"""ANNOUNCER: {name} sends out {userPokemon1Stats[0].name}, and his rival send out {rivalPokemon1Stats[0].name}! What an exciting matchup!\n\n
 ANNOUNCER: As a reminder of the rules:
 1) The Pokemon with the higher speed will go first.
 2) After each round of combat, the difference between the two Pokemon's speed will be calculated and added to itself. If the difference ever passes that of the 
@@ -428,7 +470,7 @@ ANNOUNCER: As a reminder of the rules:
 4) You cannot switch out Pokemon mid fight. Once a Pokemon is chosen, it will fight until it is fainted
 5) There are no healing items allowed
 
-Now that the rules are out of the way, LETS BEGIN!!!"""
+Now that the rules are out of the way, LETS BEGIN!!!\n\n"""
 print(statement)
 
 #Determine who goes first
