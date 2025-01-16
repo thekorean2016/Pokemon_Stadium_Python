@@ -201,7 +201,7 @@ def rivalMoveChoice():
     number = random.randrange(2, 5)
     return number
 
-def userFirst(userStats, rivalStats):
+def userFirst(userStats, rivalStats, name):
     #Determine the speed differene
     speedDifference = userStats[1].speed - rivalStats[1].speed
 
@@ -212,30 +212,52 @@ def userFirst(userStats, rivalStats):
     #Creates the loop that keeps battle going and will end the battle if someone hits 0 HP
     while userHP > 0 and rivalHP > 0:
 
-        #What move do we use first
-        statement = f"""What move would you like {userStats[0].name}, to use?\n
-        1) {userStats[2].name}: which is a {userStats[2].moveType} move
-        2) {userStats[3].name}: which is a {userStats[3].moveType} move
-        3) {userStats[4].name}: which is a {userStats[4].moveType} move
-        4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
-        """
-        print(statement)
-        userMoveNumber = int(input()) + 1
+        #Checks to see if the speed difference has doubled up the rival's speed
+        if speedDifference > 2*rivalStats[1].speed:
+            #Explain what is happening
+            statement = f"""{name}'s {userStats[0].name} is so fast, it gets to go twice!!"""
+            print(statement)
 
-        #Calculate rival damage taken
-        rivalHP = rivalHP - round(damageCalculation(userStats, rivalStats, userMoveNumber, rivalHP), 0)
+            #Pick move
+            statement = f"""What move would you like {userStats[0].name}, to use?\n
+            1) {userStats[2].name}: which is a {userStats[2].moveType} move
+            2) {userStats[3].name}: which is a {userStats[3].moveType} move
+            3) {userStats[4].name}: which is a {userStats[4].moveType} move
+            4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
+            """
+            print(statement)
+            userMoveNumber = int(input()) + 1
 
-        #If loop that checks to see if the rival's Pokemon still has HP left
-        if rivalHP > 0:
-            
-            #Rival selects move
-            rivalMoveNumber = rivalMoveChoice()
+            #Calculate rival damage taken
+            rivalHP = rivalHP - round(damageCalculation(userStats, rivalStats, userMoveNumber, rivalHP), 0)
+            speedDifference = speedDifference - 2*rivalStats[1].speed
+        else:
+            #What move do we use first
+            statement = f"""What move would you like {userStats[0].name}, to use?\n
+            1) {userStats[2].name}: which is a {userStats[2].moveType} move
+            2) {userStats[3].name}: which is a {userStats[3].moveType} move
+            3) {userStats[4].name}: which is a {userStats[4].moveType} move
+            4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
+            """
+            print(statement)
+            userMoveNumber = int(input()) + 1
 
-            #Calcuulate user damage taken
-            userHP = userHP - round(damageCalculation(rivalStats, userStats, rivalMoveNumber, userHP), 0)
+            #Calculate rival damage taken
+            rivalHP = rivalHP - round(damageCalculation(userStats, rivalStats, userMoveNumber, rivalHP), 0)
 
-        statement = f"""{userStats[0].name} has {userHP}/{userStats[1].HP}\n{rivalStats[0].name} has {rivalHP}/{rivalStats[1].HP}\n\n"""
-        print(statement)
+            #If loop that checks to see if the rival's Pokemon still has HP left
+            if rivalHP > 0:
+                
+                #Rival selects move
+                rivalMoveNumber = rivalMoveChoice()
+
+                #Calcuulate user damage taken
+                userHP = userHP - round(damageCalculation(rivalStats, userStats, rivalMoveNumber, userHP), 0)
+                speedDifference = speedDifference + userStats[1].speed - rivalStats[1].speed
+                print(speedDifference)
+
+                statement = f"""{userStats[0].name} has {userHP}/{userStats[1].HP}\n{rivalStats[0].name} has {rivalHP}/{rivalStats[1].HP}\n\n"""
+                print(statement)
 
 def rivalFirst():
     pass
@@ -462,7 +484,7 @@ rivalsPokemon = random.sample(range(0, 17), 3)
 rivalPokemon1, rivalPokemon2, rivalPokemon3 = rivalsPokemon
 
 #Set Rival's Pokemon stats
-rivalPokemon1Stats = pokemonStats[rivalPokemon1]
+rivalPokemon1Stats = pokemonStats[13]
 rivalPokemon2Stats = pokemonStats[rivalPokemon2]
 rivalPokemon3Stats = pokemonStats[rivalPokemon3]
 
@@ -485,6 +507,6 @@ print(statement)
 
 #Determine who goes first
 if userPokemon1Stats[1].speed > rivalPokemon1Stats[1].speed:
-    userFirst(userPokemon1Stats, rivalPokemon1Stats)
+    userFirst(userPokemon1Stats, rivalPokemon1Stats, name)
 if userPokemon1Stats[1].speed < rivalPokemon1Stats[1].speed:
     rivalFirst()
