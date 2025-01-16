@@ -200,14 +200,19 @@ def damageCalculation(attackingStats, defendingStats, moveNumber, foeHP):
 def rivalMoveChoice():
     number = random.randrange(2, 5)
     return number
-
-def userFirst(userStats, rivalStats, name):
+def userFirst(userStats, rivalStats, name, currentUserHP, currentRivalHP):
     #Determine the speed differene
     speedDifference = userStats[1].speed - rivalStats[1].speed
 
-    #Set the Current HP for both pokemon
-    userHP = userStats[1].HP
-    rivalHP = rivalStats[1].HP
+    #Make variables for Pokemon's HP
+    currentUserHP = userHP
+    currentRivalHP = rivalHP
+    #Check HP
+    if userHP < 1:
+        #Set thenew  Current HP for user Pokemon
+        userHP = userStats[1].HP
+    if rivalHP < 1:
+        rivalHP = rivalStats[1].HP
 
     #Creates the loop that keeps battle going and will end the battle if someone hits 0 HP
     while userHP > 0 and rivalHP > 0:
@@ -258,14 +263,19 @@ def userFirst(userStats, rivalStats, name):
                 #State what everyone's health is
                 statement = f"""{userStats[0].name} has {userHP}/{userStats[1].HP}\n{rivalStats[0].name} has {rivalHP}/{rivalStats[1].HP}\n\n"""
                 print(statement)
-
 def rivalFirst(userStats, rivalStats):
     #Determine the speed differene
     speedDifference = userStats[1].speed - rivalStats[1].speed
 
-    #Set the Current HP for both pokemon
-    userHP = userStats[1].HP
-    rivalHP = rivalStats[1].HP
+    #Make variables for Pokemon's HP
+    currentUserHP = userHP
+    currentRivalHP = rivalHP
+    #Check HP
+    if userHP < 1:
+        #Set thenew  Current HP for user Pokemon
+        userHP = userStats[1].HP
+    if rivalHP < 1:
+        rivalHP = rivalStats[1].HP
 
     #Creates the loop that keeps battle going and will end the battle if someone hits 0 HP
     while userHP > 0 and rivalHP > 0:
@@ -309,6 +319,8 @@ def rivalFirst(userStats, rivalStats):
 
 #Needed variables and objects before the code starts__________________________________________________________________________________________________________________________________
 pokemonList = ('Blaziken', 'Victreebel', 'Hawlucha', 'Bisharp', 'Tapukoko', 'Tyrantrum', 'Claydol', 'Ursaring', 'Lucario', 'Nidoking', 'Hoopa', 'Metapod', 'Mismagius', 'Aggron', 'Gyarados', 'Froslass', 'Dragonite', 'Iron Valiant')
+currentUserHP = -1
+currentRivalHP = -1
 
 Blaziken = []
 Blaziken.append(Pokemon('Blaziken', 'Fire', 'Fighting'))
@@ -552,6 +564,6 @@ print(statement)
 
 #Determine who goes first
 if userPokemon1Stats[1].speed > rivalPokemon1Stats[1].speed:
-    userFirst(userPokemon1Stats, rivalPokemon1Stats, name)
+    currentUserHP, currentRivalHP = userFirst(userPokemon1Stats, rivalPokemon1Stats, name, currentUserHP, currentRivalHP)
 if userPokemon1Stats[1].speed < rivalPokemon1Stats[1].speed:
-    rivalFirst()
+    currentUserHP, currentRivalHP = rivalFirst(userPokemon1Stats, rivalPokemon1Stats, currentUserHP, currentRivalHP)
