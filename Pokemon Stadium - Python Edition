@@ -254,13 +254,58 @@ def userFirst(userStats, rivalStats, name):
                 #Calcuulate user damage taken
                 userHP = userHP - round(damageCalculation(rivalStats, userStats, rivalMoveNumber, userHP), 0)
                 speedDifference = speedDifference + userStats[1].speed - rivalStats[1].speed
-                print(speedDifference)
 
+                #State what everyone's health is
                 statement = f"""{userStats[0].name} has {userHP}/{userStats[1].HP}\n{rivalStats[0].name} has {rivalHP}/{rivalStats[1].HP}\n\n"""
                 print(statement)
 
-def rivalFirst():
-    pass
+def rivalFirst(userStats, rivalStats):
+    #Determine the speed differene
+    speedDifference = userStats[1].speed - rivalStats[1].speed
+
+    #Set the Current HP for both pokemon
+    userHP = userStats[1].HP
+    rivalHP = rivalStats[1].HP
+
+    #Creates the loop that keeps battle going and will end the battle if someone hits 0 HP
+    while userHP > 0 and rivalHP > 0:
+
+        #Checks to see if the speed difference has doubled up the rival's speed
+        if speedDifference > 2*userStats[1].speed:
+            #Explain what is happening
+            statement = f"""Your Rival's {userStats[0].name} is so fast, it gets to go twice!!"""
+
+            #Rival selects move
+            rivalMoveNumber = rivalMoveChoice()
+
+            #Calcuulate user damage taken
+            userHP = userHP - round(damageCalculation(rivalStats, userStats, rivalMoveNumber, userHP), 0)
+            speedDifference = speedDifference - 2*userStats[1].speed
+        else:
+            #Rival selects move
+            rivalMoveNumber = rivalMoveChoice()
+
+            #Calcuulate user damage taken
+            userHP = userHP - round(damageCalculation(rivalStats, userStats, rivalMoveNumber, userHP), 0)
+            speedDifference = speedDifference + rivalStats[1].speed - userStats[1].speed
+
+            if userHP > 0:
+                #Pick move
+                statement = f"""What move would you like {userStats[0].name}, to use?\n
+                1) {userStats[2].name}: which is a {userStats[2].moveType} move
+                2) {userStats[3].name}: which is a {userStats[3].moveType} move
+                3) {userStats[4].name}: which is a {userStats[4].moveType} move
+                4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
+                """
+                print(statement)
+                userMoveNumber = int(input()) + 1
+
+                #Calculate rival damage taken
+                rivalHP = rivalHP - round(damageCalculation(userStats, rivalStats, userMoveNumber, rivalHP), 0)
+
+                #State what everyone's health is
+                statement = f"""{userStats[0].name} has {userHP}/{userStats[1].HP}\n{rivalStats[0].name} has {rivalHP}/{rivalStats[1].HP}\n\n"""
+                print(statement)
 
 #Needed variables and objects before the code starts__________________________________________________________________________________________________________________________________
 pokemonList = ('Blaziken', 'Victreebel', 'Hawlucha', 'Bisharp', 'Tapukoko', 'Tyrantrum', 'Claydol', 'Ursaring', 'Lucario', 'Nidoking', 'Hoopa', 'Metapod', 'Mismagius', 'Aggron', 'Gyarados', 'Froslass', 'Dragonite', 'Iron Valiant')
