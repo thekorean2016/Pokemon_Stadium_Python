@@ -1,11 +1,13 @@
 #ISSUE LOG
 #1. I've had issues with the speed checker. Haven't been able to figure out why. I chose Blazekin and the rival chose Tyrantrum, or maybe Lucario. Both have a speed stat so not sure what happened there
-
+    #In the userGoesFirst stuff, the 2nd Pokemon goes twice. Still counts the faint, but doesn't change to the last pokemon
+    #It wasn't Tyrantrum, it was Lucario. Says it doesn't have a speed stat
+    #1A - This has been fixed.
+#2 Made it so that the pokemon chooser only accepts numbers. Need to make sure that the other input checkers only accept one of the two values
 
 
 #Function definitions, dictionaries, classes, and imports________________________________________________________________________________________________________________________
 
-import numpy as rm
 import random
 import math
 
@@ -93,12 +95,12 @@ class MoveInfo:
 
 def nameChecker(name):
 
-    statement = f'{name}, thats your name right? Y/N\n\n'
+    statement = f'\n{name}, thats your name right? Y/N\n'
     print(statement)
     answer = input()
     answer = answer.upper()
     if answer != 'Y':
-        print("Bruh, you're the one that spelled it. Spell it right this time!\n\n")
+        print("\nBruh, you're the one that spelled it. Spell it right this time!\n\n")
         name = input()
         name = nameChecker(name)
     return name
@@ -110,9 +112,56 @@ def inputChecker(answer):
         answer = input()
         inputChecker(answer)
 def pokemonChooser():
-    choice1 = int(input())
-    choice2 = int(input())
-    choice3 = int(input())
+    checker = False
+    #Choice 1
+    choice1 = input()
+    while checker == False:
+        if not choice1.isdigit():
+            statement = f'Whoops, your first choice needs to be a number! Lets try that again :D'
+            print(statement)
+            choice1 = input()
+        else:
+            choice1 = int(choice1)
+            if choice1 in range(1,18):
+                checker = True
+            else:
+                statement = f'Whoops, your first chocie needs to be a number between 1 and 18! Lets try that again :D'
+                print(statement)
+                choice1 = input()\
+    #Choice 2
+    checker = False
+    choice2 = input()
+    while checker == False:
+        if not choice2.isdigit():
+            statement = f'Whoops, your second choice needs to be a number! Lets try that again :D'
+            print(statement)
+            choice2 = input()
+        else:
+            choice2 = int(choice2)
+            if choice2 in range(1,18):
+                checker = True
+            else:
+                statement = f'Whoops, your second chocie needs to be a number between 1 and 18! Lets try that again :D'
+                print(statement)
+                choice2 = input()
+    
+    #Choice 3
+    checker = False
+    choice3 = input()
+    while checker == False:
+        if not choice3.isdigit():
+            statement = f'Whoops, your third choice needs to be a number! Lets try that again :D'
+            print(statement)
+            choice3 = input()
+        else:
+            choice3 = int(choice3)
+            if choice3 in range(1,18):
+                checker = True
+            else:
+                statement = f'Whoops, your third chocie needs to be a number between 1 and 18! Lets try that again :D'
+                print(statement)
+                choice3 = input()
+    
     print('\n')
     return choice1, choice2, choice3
 def pokemonChecker(answer, pokemonListandTypes, pokemonList):
@@ -394,11 +443,11 @@ Ursaring.append(MoveInfo('High Horsepwoer', 'Ground', 'Physical', 95, 95))
 Ursaring.append(MoveInfo('Play Rough', 'Fairy', 'Physical', 90, 90))
 Lucario = []
 Lucario.append(Pokemon('Lucario', 'Fighting', 'Steel'))
-Lucario.append((297, 276, 196, 286, 196, 236))
-Lucario.append(('Meteor Smash', 'Steel', 'Physical', 90, 90))
-Lucario.append(('Dragon Pulse', 'Dragon', 'Special', 85, 100))
-Lucario.append(('Extreme Speed', 'Noraml', 'Physical', 80, 100))
-Lucario.append(('Aura Sphere', 'Fighting', 'Special', 80, 100))
+Lucario.append(stats(297, 276, 196, 286, 196, 236))
+Lucario.append(MoveInfo('Meteor Smash', 'Steel', 'Physical', 90, 90))
+Lucario.append(MoveInfo('Dragon Pulse', 'Dragon', 'Special', 85, 100))
+Lucario.append(MoveInfo('Extreme Speed', 'Normal', 'Physical', 80, 100))
+Lucario.append(MoveInfo('Aura Sphere', 'Fighting', 'Special', 80, 100))
 Nidoking = []
 Nidoking.append(Pokemon('Nidoking', 'Ground', 'Poison'))
 Nidoking.append(stats(319, 260.5, 210.5, 226, 206, 226))
@@ -486,23 +535,25 @@ pokemonStats.append(Iron_Valiant)
 
 #Main Code____________________________________________________________________________________________________________________________________________________________________________
 
-print('What is your name?')
+print('What is your name?\n')
 name = input()
 name = nameChecker(name)
 
 #Start the interaction
-statement = f'RIVAL: Why hello {name}! Lets battle!'
+statement = f'\nRIVAL: Why hello {name}! Lets battle!\n'
 print(statement)
 
 #Will they battle (run the application)\
-statement = f'RIVAL: Wait, {name}, do you even want to battle? Y/N\n\n'
+statement = f'RIVAL: Wait, {name}, do you even want to battle? Y/N\n'
 print(statement)
 answer = input()
+answer = answer.upper()
 inputChecker(answer)
 
 #What the NPC says if they say no
 if answer == 'N':
-    print("RIVAL: Didn't realize I ran into a scardy cat. {name}, how can you call yourself a trainer?!\n CREATOR OF THE GAME: Thanks for playing. I hope you play again!")
+    statement = f"RIVAL: Didn't realize I ran into a scardy cat. {name}, how can you call yourself a trainer?!\nCREATOR OF THE GAME: Thanks for playing. I hope you play again!"
+    print(statement)
     exit()
 
 #Start getting their pokemon
@@ -556,7 +607,7 @@ print('\nRIVAL: Well then, let me pick my Pokemon to beat you. Should be easy en
 rivalPokemon1, rivalPokemon2, rivalPokemon3 = random.sample(range(0, 17), 3)
 
 #Set Rival's Pokemon stats
-rivalPokemon1Stats = pokemonStats[5]
+rivalPokemon1Stats = pokemonStats[rivalPokemon1]
 rivalPokemon2Stats = pokemonStats[rivalPokemon2]
 rivalPokemon3Stats = pokemonStats[rivalPokemon3]
 
@@ -591,7 +642,7 @@ currentRivalHP = -1
 
 while userPokemonRemaining > 0 and rivalPokemonRemaining > 0:
     #Determine who goes first
-    if userPokemonTeam[0][1].speed >= rivalPokemonTeam[0][1].speed:
+    if userCurrentPokemon[1].speed >= rivalCurrentPokemon[1].speed:
         #Enter round of combat
         currentUserHP, currentRivalHP = userFirst(userCurrentPokemon, rivalCurrentPokemon, name, currentUserHP, currentRivalHP)
 
@@ -600,7 +651,6 @@ while userPokemonRemaining > 0 and rivalPokemonRemaining > 0:
             userPokemonRemaining = userPokemonRemaining - 1
 
             if userPokemonRemaining == 2:
-
                 #Select your next pokemon
                 statement = f"""ANNOUNCER: Whoa would you look at that! {name}'s pokemon has fainted! What Pokemon wil they send out next?\n\n
                 Will you send out:\n
@@ -609,14 +659,18 @@ while userPokemonRemaining > 0 and rivalPokemonRemaining > 0:
                 print(statement)
 
                 #Take in user input and load up the next Pokemon's stats
-                userNextUp = input()
+                userNextUp = int(input())
                 userCurrentPokemon = userPokemonTeam[userNextUp]
 
             #Depending on what pokemon you chose as #2 you auto pick your last one
             if userPokemonRemaining == 1:
                 if userNextUp == 1:
+                    statement = f"""ANNOUNCER: {name} is down to their last Pokemon! Lets see if they can turn the tide with {userPokemonTeam[2][0].name}"""
+                    print(statement)
                     userCurrentPokemon = userPokemonTeam[2]
                 if userNextUp == 2:
+                    statement = f"""ANNOUNCER: {name} is down to their last Pokemon! Lets see if they can turn the tide with {userPokemonTeam[1][0].name}"""
+                    print(statement)
                     userCurrentPokemon = userPokemonTeam[1]
 
         #If rival lost, drop the amount of Pokemon remaining, select new pokemon to fight with
@@ -624,18 +678,32 @@ while userPokemonRemaining > 0 and rivalPokemonRemaining > 0:
             rivalPokemonRemaining = rivalPokemonRemaining - 1
 
             if rivalPokemonRemaining == 2:
-                #Randomly pick the next pokemon and load up their stats
+                #Randomly select the rival's next pokemon
                 rivalNextUp = random.sample(range(1, 2), 1)
-                rivalCurrentPokemon = rivalPokemonTeam[rivalNextUp]
+                rivalNextUpInt = rivalNextUp[0]
+
+                #Load rival pokemon's stats
+                rivalCurrentPokemon = rivalPokemonTeam[rivalNextUpInt]
+
+                #Dictate what Pokemon the rival is using
+                statement = f"""ANNOUNCER: {name}'s rival's Pokemon fainted! What Pokemon will they send out next?\n
+                RIVAL: Well that's an easy choice! Go {rivalPokemonTeam[rivalNextUpInt][0].name}!\n\n"""
+                print(statement)
                 
             #Depending on which pokemon was picked, autoselect the next one
             if rivalPokemonRemaining == 1:
+                statement = f"The Rival's next pokemon number is {rivalNextUp}"
+                print(statement)
                 if rivalNextUp == 1:
                     rivalCurrentPokemon = rivalPokemonTeam[2]
+                    statement = f"""ANNOUNCER: {name}'s Rival is down to their last Pokemon! Lets see if they can turn the tide with {userPokemonTeam[2][0].name}"""
+                    print(statement)
                 if rivalNextUp == 2:
                     rivalCurrentPokemon = rivalPokemonTeam[1]
+                    statement = f"""ANNOUNCER: {name}'s Rival is down to their last Pokemon! Lets see if they can turn the tide with {userPokemonTeam[1][0].name}"""
+                    print(statement)
 
-    if userPokemonTeam[0][1].speed < rivalPokemonTeam[0][1].speed:
+    if userCurrentPokemon[1].speed < rivalCurrentPokemon[1].speed:
         #Enter round of combat
         currentUserHP, currentRivalHP = rivalFirst(userCurrentPokemon, rivalCurrentPokemon, currentUserHP, currentRivalHP)
 
@@ -675,13 +743,13 @@ while userPokemonRemaining > 0 and rivalPokemonRemaining > 0:
                 rivalNextUp = random.sample(range(1, 2), 1)
                 rivalNextUpInt = rivalNextUp[0]
 
+                #Load rival pokemon's stats
+                rivalCurrentPokemon = rivalPokemonTeam[rivalNextUpInt]
+
                 #Dictate what Pokemon the rival is using
                 statement = f"""ANNOUNCER: {name}'s rival's Pokemon fainted! What Pokemon will they send out next?\n
                 RIVAL: Well that's an easy choice! Go {rivalPokemonTeam[rivalNextUpInt][0].name}!\n\n"""
                 print(statement)
-
-                #Load rival pokemon's stats
-                rivalCurrentPokemon = rivalPokemonTeam[rivalNextUpInt]
 
             #Depending on which pokemon was picked, autoselect the next one
             if rivalPokemonRemaining == 1:
@@ -700,6 +768,6 @@ if userPokemonRemaining == 0:
 RIVAL: Hah! I knew I would win! If you ever want to taste defeat, you know where to find me!"""
     print(statement)
 if rivalPokemonRemaining == 0:
-    statement = f"""ANNOUNCER: Oh my goodness! What a heated battle! But {name}'s rival is out of usable Pokemon! They are the winner!\n
+    statement = f"""ANNOUNCER: Oh my goodness! What a heated battle! But {name}'s rival is out of usable Pokemon! {name} is the winner!\n
 RIVAL: WHAT?! How could this be? I'm going to train and then I want a rematch!"""
     print(statement)
