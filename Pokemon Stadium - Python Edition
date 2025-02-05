@@ -4,6 +4,7 @@
     #It wasn't Tyrantrum, it was Lucario. Says it doesn't have a speed stat
     #1A - This has been fixed.
 #2 Made it so that the pokemon chooser only accepts numbers. Need to make sure that the other input checkers only accept one of the two values
+    #2Update. The next section to dummy proof is the move input. Everything up to there has been dummy proofed
 
 
 #Function definitions, dictionaries, classes, and imports________________________________________________________________________________________________________________________
@@ -106,11 +107,13 @@ def nameChecker(name):
     return name
 def inputChecker(answer):
     answer = answer.upper()
+
     #Make sure they have the right kind of input
     if answer != 'Y' and answer != 'N':
         print("Whoops, that's not a recognized input, lets try that again")
         answer = input()
-        inputChecker(answer)
+        answer = inputChecker(answer)
+    return answer
 def pokemonChooser():
     checker = False
     #Choice 1
@@ -548,7 +551,7 @@ statement = f'RIVAL: Wait, {name}, do you even want to battle? Y/N\n'
 print(statement)
 answer = input()
 answer = answer.upper()
-inputChecker(answer)
+answer = inputChecker(answer)
 
 #What the NPC says if they say no
 if answer == 'N':
