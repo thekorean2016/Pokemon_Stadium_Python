@@ -1,11 +1,11 @@
 #ISSUE LOG
-#1. I've had issues with the speed checker. Haven't been able to figure out why. I chose Blazekin and the rival chose Tyrantrum, or maybe Lucario. Both have a speed stat so not sure what happened there
-    #In the userGoesFirst stuff, the 2nd Pokemon goes twice. Still counts the faint, but doesn't change to the last pokemon
-    #It wasn't Tyrantrum, it was Lucario. Says it doesn't have a speed stat
-    #1A - This has been fixed.
 #2 Made it so that the pokemon chooser only accepts numbers. Need to make sure that the other input checkers only accept one of the two values
     #2Update. The next section to dummy proof is the move input. Everything up to there has been dummy proofed
-
+    #2Update. Got the user move first stuff figured out. Now to copy to the rival first stuff.
+#3 when the rival goes first, it doesn't send out it's last pokemon, it just reloads the 2nd
+    #3Update: I haven't seen this in a while... not sure what happened to it
+#4 When the rival goes first, it is using the user's move input twice before allowing them to pick a different move
+    #4A. The checker was turned True after the first input, and because of that, was no longer able to gather another input. Added a line always making the checker false right before the loop so that it always goes into the loop
 
 #Function definitions, dictionaries, classes, and imports________________________________________________________________________________________________________________________
 
@@ -96,10 +96,20 @@ class MoveInfo:
 
 def nameChecker(name):
 
+    #Check if they spelled their name right
     statement = f'\n{name}, thats your name right? Y/N\n'
     print(statement)
     answer = input()
     answer = answer.upper()
+
+    #Make sure that they gave an acceptable answer
+    while answer != 'Y' and answer != 'N':
+        statement = f"\nBro, that's not even an answer, how about we try that again.\n\n{name}, that's how you spell it right? Y/N\n"
+        print(statement)
+        answer = input()
+        answer = answer.upper()
+
+    #If they haven't actually spelled it right, ask them to spell it right
     if answer != 'Y':
         print("\nBruh, you're the one that spelled it. Spell it right this time!\n\n")
         name = input()
@@ -125,12 +135,12 @@ def pokemonChooser():
             choice1 = input()
         else:
             choice1 = int(choice1)
-            if choice1 in range(1,18):
+            if choice1 in range(1,19):
                 checker = True
             else:
                 statement = f'Whoops, your first chocie needs to be a number between 1 and 18! Lets try that again :D'
                 print(statement)
-                choice1 = input()\
+                choice1 = input()
     #Choice 2
     checker = False
     choice2 = input()
@@ -141,7 +151,7 @@ def pokemonChooser():
             choice2 = input()
         else:
             choice2 = int(choice2)
-            if choice2 in range(1,18):
+            if choice2 in range(1,19):
                 checker = True
             else:
                 statement = f'Whoops, your second chocie needs to be a number between 1 and 18! Lets try that again :D'
@@ -158,14 +168,13 @@ def pokemonChooser():
             choice3 = input()
         else:
             choice3 = int(choice3)
-            if choice3 in range(1,18):
+            if choice3 in range(1,19):
                 checker = True
             else:
                 statement = f'Whoops, your third chocie needs to be a number between 1 and 18! Lets try that again :D'
                 print(statement)
                 choice3 = input()
     
-    print('\n')
     return choice1, choice2, choice3
 def pokemonChecker(answer, pokemonListandTypes, pokemonList):
     answer = answer.upper()
@@ -281,29 +290,56 @@ def userFirst(userStats, rivalStats, name, currentUserHP, currentRivalHP):
             statement = f"""{name}'s {userStats[0].name} is so fast, it gets to go twice!!"""
             print(statement)
 
-            #Pick move
-            statement = f"""What move would you like {userStats[0].name}, to use?\n
-            1) {userStats[2].name}: which is a {userStats[2].moveType} move
-            2) {userStats[3].name}: which is a {userStats[3].moveType} move
-            3) {userStats[4].name}: which is a {userStats[4].moveType} move
-            4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
-            """
-            print(statement)
-            userMoveNumber = int(input()) + 1
+            checker = False
+
+            while checker == False:
+                #Pick move
+                statement = f"""What move would you like {userStats[0].name}, to use?\n
+                1) {userStats[2].name}: which is a {userStats[2].moveType} move
+                2) {userStats[3].name}: which is a {userStats[3].moveType} move
+                3) {userStats[4].name}: which is a {userStats[4].moveType} move
+                4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
+                """
+                print(statement)
+                userMoveNumber = input()
+
+                #Dummy proof input
+                if userMoveNumber.isdigit():
+                    userMoveNumber = int(userMoveNumber)
+                    if userMoveNumber in range(1, 5):
+                        userMoveNumber = userMoveNumber + 1
+                        checker = True
+                    else:
+                        print("Whoops, that's not in the range we want. Lets try that again :D")
+                else:
+                    print("Whoops, that's not an acceptable input. Lets try that one again :D")
 
             #Calculate rival damage taken
             rivalHP = rivalHP - round(damageCalculation(userStats, rivalStats, userMoveNumber, rivalHP), 0)
             speedDifference = speedDifference - 2*rivalStats[1].speed
         else:
-            #What move do we use first
-            statement = f"""What move would you like {userStats[0].name}, to use?\n
-            1) {userStats[2].name}: which is a {userStats[2].moveType} move
-            2) {userStats[3].name}: which is a {userStats[3].moveType} move
-            3) {userStats[4].name}: which is a {userStats[4].moveType} move
-            4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
-            """
-            print(statement)
-            userMoveNumber = int(input()) + 1
+            checker = False
+            while checker == False:
+                #What move do we use first
+                statement = f"""What move would you like {userStats[0].name}, to use?\n
+                1) {userStats[2].name}: which is a {userStats[2].moveType} move
+                2) {userStats[3].name}: which is a {userStats[3].moveType} move
+                3) {userStats[4].name}: which is a {userStats[4].moveType} move
+                4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
+                """
+                print(statement)
+                userMoveNumber = input()
+
+                 #Dummy proof input
+                if userMoveNumber.isdigit():
+                    userMoveNumber = int(userMoveNumber)
+                    if userMoveNumber in range(1, 5):
+                        userMoveNumber = userMoveNumber + 1
+                        checker = True
+                    else:
+                        print("Whoops, that's not in the range we want. Lets try that again :D")
+                else:
+                    print("Whoops, that's not an acceptable input. Lets try that one again :D")
 
             #Calculate rival damage taken
             rivalHP = rivalHP - round(damageCalculation(userStats, rivalStats, userMoveNumber, rivalHP), 0)
@@ -331,6 +367,7 @@ def rivalFirst(userStats, rivalStats, currentUserHP, currentRivalHP):
     #Make variables for Pokemon's HP
     userHP = currentUserHP
     rivalHP = currentRivalHP
+    checker = False
 
     #Check HP
     if userHP < 1:
@@ -365,15 +402,28 @@ def rivalFirst(userStats, rivalStats, currentUserHP, currentRivalHP):
             speedDifference = speedDifference + rivalStats[1].speed - userStats[1].speed
 
             if userHP > 0:
-                #Pick move
-                statement = f"""What move would you like {userStats[0].name}, to use?\n
-                1) {userStats[2].name}: which is a {userStats[2].moveType} move
-                2) {userStats[3].name}: which is a {userStats[3].moveType} move
-                3) {userStats[4].name}: which is a {userStats[4].moveType} move
-                4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
-                """
-                print(statement)
-                userMoveNumber = int(input()) + 1
+                checker = False
+                while checker == False:
+                    #Pick move
+                    statement = f"""What move would you like {userStats[0].name}, to use?\n
+                    1) {userStats[2].name}: which is a {userStats[2].moveType} move
+                    2) {userStats[3].name}: which is a {userStats[3].moveType} move
+                    3) {userStats[4].name}: which is a {userStats[4].moveType} move
+                    4) {userStats[5].name}: which is a {userStats[5].moveType} move\n
+                    """
+                    print(statement)
+                    userMoveNumber = input()
+
+                    #Dummy proof input
+                    if userMoveNumber.isdigit():
+                        userMoveNumber = int(userMoveNumber)
+                        if userMoveNumber in range(1, 5):
+                            userMoveNumber = userMoveNumber + 1
+                            checker = True
+                        else:
+                            print("Whoops, that's not in the range we want. Lets try that again :D")
+                    else:
+                        print("Whoops, that's not an acceptable input. Lets try that one again :D")
 
                 #Calculate rival damage taken
                 rivalHP = rivalHP - round(damageCalculation(userStats, rivalStats, userMoveNumber, rivalHP), 0)
@@ -560,7 +610,7 @@ if answer == 'N':
     exit()
 
 #Start getting their pokemon
-print("So, what Pokemon would you like to use to lose?")
+print("\nSo, what Pokemon would you like to use to lose?")
 
     #List the Pokemon you can choose from
 pokemonListandTypes = '''1) Blaziken: Fire Fighting
@@ -580,14 +630,14 @@ pokemonListandTypes = '''1) Blaziken: Fire Fighting
 15) Gyarados: Water Flying
 16) Froslass: Ice Ghost
 17) Dragonite: Dragon Flying
-18) Iron Valiant: Fairy Fighting'''
+18) Iron Valiant: Fairy Fighting\n'''
 print(pokemonListandTypes)
 
     #Player picks their Pokemon
 userPokemon1, userPokemon2, userPokemon3 = pokemonChooser()
 if userPokemon1 > 18 or userPokemon2 > 18 or userPokemon3 > 18:
     userPokemon1, userPokemon2, userPokemon3 = pokemonRecount()
-statement = f'Did you choose {pokemonList[userPokemon1 - 1]}, {pokemonList[userPokemon2 - 1]}, and {pokemonList[userPokemon3 - 1]}? Y/N'
+statement = f'\nDid you choose {pokemonList[userPokemon1 - 1]}, {pokemonList[userPokemon2 - 1]}, and {pokemonList[userPokemon3 - 1]}? Y/N\n'
 print(statement)
 answer = input().upper()
 
@@ -610,9 +660,9 @@ print('\nRIVAL: Well then, let me pick my Pokemon to beat you. Should be easy en
 rivalPokemon1, rivalPokemon2, rivalPokemon3 = random.sample(range(0, 17), 3)
 
 #Set Rival's Pokemon stats
-rivalPokemon1Stats = pokemonStats[rivalPokemon1]
-rivalPokemon2Stats = pokemonStats[rivalPokemon2]
-rivalPokemon3Stats = pokemonStats[rivalPokemon3]
+rivalPokemon1Stats = pokemonStats[3]
+rivalPokemon2Stats = pokemonStats[6]
+rivalPokemon3Stats = pokemonStats[15]
 
 #Place Pokemon into Rival's Team
 rivalPokemonTeam = [rivalPokemon1Stats, rivalPokemon2Stats, rivalPokemon3Stats]
@@ -697,13 +747,13 @@ while userPokemonRemaining > 0 and rivalPokemonRemaining > 0:
             if rivalPokemonRemaining == 1:
                 statement = f"The Rival's next pokemon number is {rivalNextUp}"
                 print(statement)
-                if rivalNextUp == 1:
+                if rivalNextUpInt == 1:
                     rivalCurrentPokemon = rivalPokemonTeam[2]
-                    statement = f"""ANNOUNCER: {name}'s Rival is down to their last Pokemon! Lets see if they can turn the tide with {userPokemonTeam[2][0].name}"""
+                    statement = f"""ANNOUNCER: {name}'s Rival is down to their last Pokemon! Lets see if they can turn the tide with {rivalPokemonTeam[2][0].name}"""
                     print(statement)
-                if rivalNextUp == 2:
+                if rivalNextUpInt == 2:
                     rivalCurrentPokemon = rivalPokemonTeam[1]
-                    statement = f"""ANNOUNCER: {name}'s Rival is down to their last Pokemon! Lets see if they can turn the tide with {userPokemonTeam[1][0].name}"""
+                    statement = f"""ANNOUNCER: {name}'s Rival is down to their last Pokemon! Lets see if they can turn the tide with {rivalPokemonTeam[1][0].name}"""
                     print(statement)
 
     if userCurrentPokemon[1].speed < rivalCurrentPokemon[1].speed:
