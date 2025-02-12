@@ -1,12 +1,3 @@
-#ISSUE LOG
-#1. I've had issues with the speed checker. Haven't been able to figure out why. I chose Blazekin and the rival chose Tyrantrum, or maybe Lucario. Both have a speed stat so not sure what happened there
-    #In the userGoesFirst stuff, the 2nd Pokemon goes twice. Still counts the faint, but doesn't change to the last pokemon
-    #It wasn't Tyrantrum, it was Lucario. Says it doesn't have a speed stat
-    #1A - This has been fixed.
-#2 Made it so that the pokemon chooser only accepts numbers. Need to make sure that the other input checkers only accept one of the two values
-    #2Update. The next section to dummy proof is the move input. Everything up to there has been dummy proofed
-
-
 #Function definitions, dictionaries, classes, and imports________________________________________________________________________________________________________________________
 
 import random
